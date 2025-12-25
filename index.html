@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoaNyx - Visual Architect & Community Strategist</title>
+    <link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .font-spectral {
+            font-family: 'Spectral', serif;
+        }
+
+        .grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.05;
+            z-index: 100;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='3.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            z-index: 200;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: #fff;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 150;
+            transition: all 0.5s ease;
+            padding: 1.5rem 3rem;
+        }
+
+        nav.scrolled {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Spectral', serif;
+            font-size: 2rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 3rem;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+        }
+
+        .nav-menu a {
+            color: #666;
+            text-decoration: none;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: #fff;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #fff;
+            transition: width 0.5s ease;
+        }
+
+        .nav-menu a:hover::after,
+        .nav-menu a.active::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-content {
+            text-align: center;
+        }
+
+        .mobile-menu-item {
+            font-family: 'Spectral', serif;
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 2rem 0;
+            cursor: pointer;
+            transition: transform 0.5s ease;
+        }
+
+        .mobile-menu-item:hover {
+            transform: translateX(1rem);
+        }
+
+        .close-menu {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+
+        .hero-image {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.1s linear;
+            font-size: 20rem;
+            opacity: 0.15;
+            filter: blur(2px);
+        }
+
+        .hero-gradient {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.5), #000);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+        }
+
+        .hero-line {
+            width: 2px;
+            height: 96px;
+            background: linear-gradient(to bottom, #fff, transparent);
+            margin: 0 auto 2rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-title {
+            font-family: 'Spectral', serif;
+            font-size: 9rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            letter-spacing: -2px;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #999;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .hero-description {
+            font-size: 1.125rem;
+            color: #666;
+            max-width: 42rem;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 5rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-primary {
+            background: #fff;
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: #e5e5e5;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #fff;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            color: #666;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            flex-wrap: wrap;
+        }
+
+        .hero-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        section {
+            padding: 8rem 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 5rem;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Spectral', serif;
+            font-size: 4.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .section-line {
+            width: 96px;
+            height: 1px;
+            background: linear-gradient(to right, #fff, transparent);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: #000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            transform: scale(1.05) translateY(-10px);
+            box-shadow: 0 0 60px rgba(255, 255, 255, 0.2);
+        }
+
+        .service-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-title {
+            font-family: 'Spectral', serif;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .service-description {
+            font-size: 0.875rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .project-card {
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .project-card:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+
+        .project-image {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4/5;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), #000);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+        }
+
+        .project-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, #000, transparent);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .project-card:hover .project-image::before {
+            opacity: 1;
+        }
+
+        .project-tools {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover .project-tools {
+            transform: translateY(0);
+        }
+
+        .project-tool {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            background: #fff;
+            color: #000;
+            letter-spacing: 1px;
+        }
+
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+        }
+
+        .project-category {
+            color: #fff;
+        }
+
+        .project-year {
+            color: #666;
+        }
+
+        .project-title {
+            font-family: 'Spectral', serif;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.75rem;
+        }
+
+        .project-description {
+            font-size: 0.875rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .discord-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .discord-card {
+            background: #000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2.5rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .discord-card:hover {
+            transform: scale(1.05) translateY(-10px);
+            box-shadow: 0 0 60px rgba(255, 255, 255, 0.2);
+        }
+
+        .discord-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+        }
+
+        .discord-name {
+            font-family: 'Spectral', serif;
+            font-size: 1.875rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .discord-role {
+            font-size: 0.875rem;
+            color: #fff;
+        }
+
+        .discord-members {
+            font-family: 'Spectral', serif;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .discord-members-label {
+            font-size: 0.75rem;
+            color: #666;
+            letter-spacing: 2px;
+        }
+
+        .discord-badges {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .discord-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            letter-spacing: 1px;
+        }
+
+        .badge-outline {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #666;
+        }
+
+        .badge-filled {
+            background: #fff;
+            color: #000;
+        }
+
+        .expertise-box {
+            background: #000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .expertise-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .expertise-title {
+            font-family: 'Spectral', serif;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+
+        .expertise-description {
+            font-size: 1.125rem;
+            color: #666;
+            max-width: 48rem;
+            margin: 0 auto 2rem;
+            line-height: 1.8;
+        }
+
+        .expertise-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            color: #666;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+        }
+
+        .contact-section {
+            text-align: center;
+            padding: 8rem 3rem;
+            background: linear-gradient(to top, rgba(255,255,255,0.05), #000);
+        }
+
+        .contact-email {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.25rem 2.5rem;
+            background: #fff;
+            color: #000;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-decoration: none;
+            margin: 3rem 0;
+            transition: background 0.3s ease;
+        }
+
+        .contact-email:hover {
+            background: #e5e5e5;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            width: 56px;
+            height: 56px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .social-link:hover {
+            border-color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        footer {
+            padding: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            font-family: 'Spectral', serif;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            color: #666;
+        }
+
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        .footer-copyright {
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            font-size: 0.75rem;
+            color: #444;
+        }
+
+        @media (max-width: 1024px) {
+            .hero-title {
+                font-size: 6rem;
+            }
+
+            .section-title {
+                font-size: 3rem;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 4rem;
+            }
+
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            section {
+                padding: 4rem 1.5rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .discord-grid,
+            .projects-grid,
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mobile-menu-item {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grain"></div>
+    
+    <div class="progress-bar">
+        <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">NoaNyx</div>
+            
+            <div class="nav-menu">
+                <a href="#home" class="nav-link">HOME</a>
+                <a href="#projects" class="nav-link">PROJECTS</a>
+                <a href="#discord" class="nav-link">DISCORD</a>
+                <a href="#contact" class="nav-link">CONTACT</a>
+            </div>
+
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="close-menu" id="closeMenu">✕</div>
+        <div class="mobile-menu-content">
+            <div class="mobile-menu-item" data-section="home">HOME</div>
+            <div class="mobile-menu-item" data-section="projects">PROJECTS</div>
+            <div class="mobile-menu-item" data-section="discord">DISCORD</div>
+            <div class="mobile-menu-item" data-section="contact">CONTACT</div>
+        </div>
+    </div>
+
+    <section id="home" class="hero">
+        <div class="hero-bg">
+            <div class="hero-image" id="heroImage">
+                ✟
+            </div>
+            <div class="hero-gradient"></div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="hero-line"></div>
+            
+            <h1 class="hero-title">NoaNyx</h1>
+            
+            <p class="hero-subtitle">Visual Architect & Community Strategist</p>
+            
+            <p class="hero-description">Crafting dark, cinematic visuals and architecting thriving digital communities with precision and artistry</p>
+            
+            <div class="hero-buttons">
+                <button class="btn btn-primary" data-scroll="projects">
+                    VIEW WORK
+                    <span>→</span>
+                </button>
+                <button class="btn btn-secondary" data-scroll="contact">GET IN TOUCH</button>
+            </div>
+            
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span>⭐</span>
+                    <span>40K+ COMMUNITY</span>
+                </div>
+                <div class="hero-stat">
+                    <span>✨</span>
+                    <span>4+ YEARS</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-header">
+            <p class="section-label">EXPERTISE</p>
+            <h2 class="section-title">Craft & Strategy</h2>
+            <div class="section-line"></div>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">▶</div>
+                <h3 class="service-title">Video Editing</h3>
+                <p class="service-description">Cinematic storytelling through precise cuts, color grading, and motion graphics</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🖼</div>
+                <h3 class="service-title">Photo Editing</h3>
+                <p class="service-description">Advanced retouching and atmospheric manipulation for striking visual narratives</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🎨</div>
+                <h3 class="service-title">Graphic Design</h3>
+                <p class="service-description">Gothic-inspired brand identities, editorial layouts, and digital art direction</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🛡</div>
+                <h3 class="service-title">Discord Management</h3>
+                <p class="service-description">Strategic community building, server architecture, and professional moderation</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" style="background: linear-gradient(to bottom, #000, rgba(255,255,255,0.05), #000);">
+        <div class="section-header">
+            <p class="section-label">PORTFOLIO</p>
+            <h2 class="section-title">Selected Works</h2>
+            <p class="hero-description" style="text-align: left;">A curated collection of visual storytelling, brand identity, and digital craftsmanship</p>
+            <div class="section-line"></div>
+        </div>
+
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-image">
+                    🌙
+                    <div class="project-tools">
+                        <span class="project-tool">Premiere Pro</span>
+                        <span class="project-tool">After Effects</span>
+                    </div>
+                </div>
+                <div class="project-meta">
+                    <span class="project-category">CINEMATIC VIDEO</span>
+                    <span class="project-year">2024</span>
+                </div>
+                <h3 class="project-title">Ethereal Nights</h3>
+                <p class="project-description">A moody gaming montage featuring dynamic color grading, seamless transitions, and atmospheric soundscapes</p>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image">
+                    🖤
+                    <div class="project-tools">
+                        <span class="project-tool">Photoshop</span>
+                        <span class="project-tool">Illustrator</span>
+                    </div>
+                </div>
+                <div class="project-meta">
+                    <span class="project-category">BRAND IDENTITY</span>
+                    <span class="project-year">2024</span>
+                </div>
+                <h3 class="project-title">Obsidian Brand</h3>
+                <p class="project-description">Complete visual system with gothic typography, dark color palette, and premium brand collateral</p>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image">
+                    ⚡
+                    <div class="project-tools">
+                        <span class="project-tool">After Effects</span>
+                        <span class="project-tool">Cinema 4D</span>
+                    </div>
+                </div>
+                <div class="project-meta">
+                    <span class="project-category">EVENT PROMO</span>
+                    <span class="project-year">2024</span>
+                </div>
+                <h3 class="project-title">Neon Visions</h3>
+                <p class="project-description">High-energy promotional video with motion graphics, particle effects, and synchronized audio design</p>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image">
+                    🔮
+                    <div class="project-tools">
+                        <span class="project-tool">Lightroom</span>
+                        <span class="project-tool">Photoshop</span>
+                    </div>
+                </div>
+                <div class="project-meta">
+                    <span class="project-category">PHOTO SERIES</span>
+                    <span class="project-year">2023</span>
+                </div>
+                <h3 class="project-title">Dark Aesthetic</h3>
+                <p class="project-description">Cohesive social media content with advanced retouching, dramatic lighting, and gothic atmospherics</p>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image">
+                    👑
+                    <div class="project-tools">
+                        <span class="project-tool">Figma</span>
+                        <span class="project-tool">Photoshop</span>
+                    </div>
+                </div>
+                <div class="project-meta">
+                    <span class="project-category">DISCORD DESIGN</span>
+                    <span class="project-year">2024</span>
+                </div>
+                <h3 class="project-title">Sanctuary Branding</h3>
+                <p class="project-description">Full server visual identity including custom icons, banners, emotes, and animated role badges</p>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image">
+                    🎬
+                    <div class="project-tools">
+                        <span class="project-tool">After Effects</span>
+                        <span class="project-tool">Premiere</span>
+                    </div>
+                </div>
+                <div class="project-meta">
+                    <span class="project-category">YOUTUBE PACKAGE</span>
+                    <span class="project-year">2023</span>
+                </div>
+                <h3 class="project-title">Shadow Content</h3>
+                <p class="project-description">Channel branding suite with cinematic intros, animated outros, and branded thumbnail templates</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="discord">
+        <div class="section-header">
+            <p class="section-label">COMMUNITY</p>
+            <h2 class="section-title">Discord Leadership</h2>
+            <p class="hero-description" style="text-align: left;">Building and managing thriving digital communities with over 41,000 combined members</p>
+            <div class="section-line"></div>
+        </div>
+
+        <div class="discord-grid">
+            <div class="discord-card">
+                <div class="discord-header">
+                    <div>
+                        <h3 class="discord-name">Shadow Realm</h3>
+                        <p class="discord-role">Head Administrator</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="discord-members">12.5K</div>
+                        <div class="discord-members-label">MEMBERS</div>
+                    </div>
+                </div>
+                <div class="discord-badges">
+                    <span class="discord-badge badge-outline">Gaming Community</span>
+                    <span class="discord-badge badge-filled">Active</span>
+                </div>
+            </div>
+
+            <div class="discord-card">
+                <div class="discord-header">
+                    <div>
+                        <h3 class="discord-name">Creative Nexus</h3>
+                        <p class="discord-role">Senior Moderator</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="discord-members">8.3K</div>
+                        <div class="discord-members-label">MEMBERS</div>
+                    </div>
+                </div>
+                <div class="discord-badges">
+                    <span class="discord-badge badge-outline">Creator Hub</span>
+                    <span class="discord-badge badge-filled">Active</span>
+                </div>
+            </div>
+
+            <div class="discord-card">
+                <div class="discord-header">
+                    <div>
+                        <h3 class="discord-name">Midnight Society</h3>
+                        <p class="discord-role">Administrator</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="discord-members">5.6K</div>
+                        <div class="discord-members-label">MEMBERS</div>
+                    </div>
+                </div>
+                <div class="discord-badges">
+                    <span class="discord-badge badge-outline">Art & Music</span>
+                    <span class="discord-badge badge-filled">Active</span>
+                </div>
+            </div>
+
+            <div class="discord-card">
+                <div class="discord-header">
+                    <div>
+                        <h3 class="discord-name">Tech Sanctuary</h3>
+                        <p class="discord-role">Community Manager</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="discord-members">15.2K</div>
+                        <div class="discord-members-label">MEMBERS</div>
+                    </div>
+                </div>
+                <div class="discord-badges">
+                    <span class="discord-badge badge-outline">Development</span>
+                    <span class="discord-badge badge-filled">Active</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="expertise-box">
+            <div class="expertise-icon">🛡</div>
+            <h3 class="expertise-title">Proven Expertise</h3>
+            <p class="expertise-description">Specializing in server architecture, bot configuration, moderation systems, role management, and engagement strategies.</p>
+            <div class="expertise-tags">
+                <span>ARCHITECTURE</span><span>•</span><span>CONFIGURATION</span><span>•</span><span>LEADERSHIP</span><span>•</span><span>STRATEGY</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <p class="section-label">LET'S CONNECT</p>
+        <h2 class="section-title">Start a Project</h2>
+        <p class="hero-description">Whether you need visual content creation or community management expertise, I'm here to bring your vision to life</p>
+
+        <a href="mailto:noanyx@example.com" class="contact-email">
+            ✉
+            <span>NOANYX@EXAMPLE.COM</span>
+            <span>→</span>
+        </a>
+
+        <div class="social-links">
+            <a href="#" class="social-link">G</a>
+            <a href="#" class="social-link">L</a>
+            <a href="#" class="social-link">T</a>
+            <a href="#" class="social-link">I</a>
+            <a href="#" class="social-link">D</a>
+            <a href="#" class="social-link">M</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-logo">NoaNyx</div>
+                
+                <div class="footer-links">
+                    <a href="#">PRIVACY</a>
+                    <a href="#">TERMS</a>
+                    <a href="#">COOKIES</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    © 2024 NoaNyx. All rights reserved.
+                </div>
+                <p class="footer-tagline">
+                    Crafted with precision and passion
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll progress bar
+        window.addEventListener('scroll', function() {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+
+            // Hero image parallax
+            const heroImage = document.getElementById('heroImage');
+            const rotation = winScroll * 0.1;
+            const scale = 1 + scrolled / 500;
+            heroImage.style.transform = `rotate(${rotation}deg) scale(${scale})`;
+
+            // Navbar background on scroll
+            const navbar = document.getElementById('navbar');
+            if (winScroll > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            // Update active nav link
+            const sections = document.querySelectorAll('section[id]');
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionHeight = section.clientHeight;
+                const sectionId = section.getAttribute('id');
+                
+                if (winScroll >= sectionTop && winScroll < sectionTop + sectionHeight) {
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
+
+        // Smooth scroll function
+        function smoothScrollTo(targetId) {
+            const target = document.getElementById(targetId);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Mobile menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const closeMenu = document.getElementById('closeMenu');
+
+        hamburger.addEventListener('click', function() {
+            mobileMenu.classList.add('active');
+        });
+
+        closeMenu.addEventListener('click', function() {
+            mobileMenu.classList.remove('active');
+        });
+
+        // Mobile menu items
+        document.querySelectorAll('.mobile-menu-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const section = this.getAttribute('data-section');
+                mobileMenu.classList.remove('active');
+                smoothScrollTo(section);
+            });
+        });
+
+        // Navigation links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                smoothScrollTo(targetId);
+            });
+        });
+
+        // Scroll buttons
+        document.querySelectorAll('[data-scroll]').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-scroll');
+                smoothScrollTo(targetId);
+            });
+        });
+    </script>
+</body>
+</html>
